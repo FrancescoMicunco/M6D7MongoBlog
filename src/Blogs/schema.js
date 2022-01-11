@@ -1,21 +1,21 @@
 import express from 'express'
-import { Mongoose } from 'mongoose'
+import mongoose from 'mongoose'
 
+const { Schema } = new Schema({
 
-const blogPost = new Mongoose.schema({
-    "_id": "MONGO GENERATED ID",
-    "category": "ARTICLE CATEGORY",
-    "title": "ARTICLE TITLE",
-    "cover": "ARTICLE COVER (IMAGE LINK)",
-    "readTime": {
+    category: String,
+    title: String,
+    cover: String,
+    readTime: {
         "value": Number,
         "unit": "minute"
     },
-    "author": {
-        "name": "AUTHOR NAME",
-        "avatar": "AUTHOR AVATAR LINK"
+    author: {
+        name: String,
+        avatar: String
     },
-    "content": "HTML",
-    "createdAt": "DATE",
-    "updatedAt": "DATE"
+    content: String,
+
 })
+
+const Blog = mongoose.model('Blog', blogSchema);
