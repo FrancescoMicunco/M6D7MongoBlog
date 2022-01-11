@@ -48,6 +48,8 @@ router
     }
 })
 
+
+
 .delete(async(req, res, next) => {
     try {
         const blog = await BlogsModel.findByIdAndDelete(req.params.id)
