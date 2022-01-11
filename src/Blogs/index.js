@@ -17,7 +17,8 @@ router
     .get(async(req, res, next) => {
         try {
             const blog = await BlogsModel.find()
-            res.send("201 - blogPost correctly added", blog)
+            res.status(200).send(blog)
+
         } catch (error) {
             next(error)
         }
@@ -48,11 +49,10 @@ router
     }
 })
 
-
-
 .delete(async(req, res, next) => {
     try {
         const blog = await BlogsModel.findByIdAndDelete(req.params.id)
+        console.log(blog)
         if (blog > 0) {
             res.send("201 - blog deleted!")
         } else { res.send("Blog not found!") }
