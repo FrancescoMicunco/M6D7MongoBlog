@@ -4,18 +4,18 @@ const { Schema, model } = mongoose
 
 const blogPost = new Schema({
 
-    category: { type: String },
-    title: { type: String },
-    cover: { type: String },
+    category: { type: String, required: true },
+    title: String,
+    cover: String,
     readTime: {
-        "value": { type: Number },
-        "unit": { type: String }
+        "value": String,
+        "unit": String,
     },
     author: {
-        name: { type: String },
-        avatar: { type: String }
+        name: String,
+        avatar: String,
     },
-    content: { type: String },
+    content: String,
 
 })
 

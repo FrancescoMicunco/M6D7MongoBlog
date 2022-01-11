@@ -7,6 +7,7 @@ router
     .route('/')
     .post(async(req, res, next) => {
         try {
+            console.log(req.body)
             const blog = await BlogsModel(req.body)
             const { _id } = await blog.save()
             res.status(201).send({ _id })

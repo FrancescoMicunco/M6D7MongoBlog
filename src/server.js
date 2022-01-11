@@ -11,11 +11,12 @@ import {
 
 const server = express()
 
+
 const PORT = process.env.PORT || 3001
 
 server.use(cors())
-
-// ==========  endPoints ==========
+server.use(express.json())
+    // ==========  endPoints ==========
 server.use('/blog', blogRouter)
 
 
