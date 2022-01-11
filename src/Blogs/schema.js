@@ -1,21 +1,22 @@
-import express from 'express'
 import mongoose from 'mongoose'
 
-const { Schema } = new Schema({
+const { Schema, model } = mongoose
 
-    category: String,
-    title: String,
-    cover: String,
+const blogPost = new Schema({
+
+    category: { type: String },
+    title: { type: String },
+    cover: { type: String },
     readTime: {
-        "value": Number,
-        "unit": "minute"
+        "value": { type: Number },
+        "unit": { type: String }
     },
     author: {
-        name: String,
-        avatar: String
+        name: { type: String },
+        avatar: { type: String }
     },
-    content: String,
+    content: { type: String },
 
 })
 
-const Blog = mongoose.model('Blog', blogSchema);
+export default model("Blog", blogPost);

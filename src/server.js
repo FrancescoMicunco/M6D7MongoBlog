@@ -3,6 +3,11 @@ import listEndpoints from 'express-list-endpoints'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import BlogPostRouter from './Blogs/schema.js'
+import {
+    badRequestHandler,
+    notFoundHandler,
+    genericErrorHandler
+} from './errorHandlers.js'
 
 const server = express()
 

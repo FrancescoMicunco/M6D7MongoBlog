@@ -1,22 +1,23 @@
 import express from 'express'
-import Blogs from './schema.js'
+import BlogsModel from './schema.js'
 
 const router = express.Router();
 
 router
     .route('/')
-    .get(async(req, res, next) => {
+    .post(async(req, res, next) => {
         try {
-            const blog = await Blogs.findAll()
-            res.send(blog)
+            const blog = await BlogsModel(req.body)
+            const { _id } = await blog.save()
+            res.status(201).send({ _id })
         } catch (error) {
             next(error)
         }
     })
-    .post(async(req, res, next) => {
+    .get(async(req, res, next) => {
         try {
-            const blog = await Blogs.create(req.body)
-            res.send("201 - blogPost correctly added")
+            const blog = await BlogsModel.find()
+            res.send("201 - blogPost correctly added", blog)
         } catch (error) {
             next(error)
         }
@@ -26,13 +27,9 @@ router
     .route('/:id')
     .get(async(req, res, next) => {
         try {
-            const blog = await Blogs.findOne({
-                where: {
-                    id: req.params.id
-                }
-            })
+            const blog = await BlogsModel.findById(req.params.id)
             if (blog === null) { "this blog doesn't exist" } else {
-                res.send(user)
+                res.send(blog)
             }
 
         } catch (error) {
@@ -42,13 +39,10 @@ router
 
 .put(async(req, res, next) => {
     try {
-        const blog = await Blogs.update(req.body, {
-            where: {
-                id: req.params.id
-            },
-            returning: true
-        })
-        res.send(user)
+        const blog = await BlogsModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        if (blog === null) { "this blog doesn't exist" } else {
+            res.send(blog)
+        }
     } catch (error) {
         next(error)
     }
@@ -56,22 +50,13 @@ router
 
 .delete(async(req, res, next) => {
     try {
-        const blog = await Blogs.destroy({
-            where: {
-                id: req.params.id
-            }
-        })
+        const blog = await BlogsModel.findByIdAndDelete(req.params.id)
         if (blog > 0) {
             res.send("201 - blog deleted!")
-        } else { res.send("Blogs not found!") }
+        } else { res.send("Blog not found!") }
     } catch (error) {
         next(error)
     }
 })
-
-
-
-
-
 
 export default router
