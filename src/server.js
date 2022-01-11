@@ -27,16 +27,14 @@ server.use(genericErrorHandler)
 
 // ========== connection ==========
 
-
-mongoose.connect(process.env.DB_CONNECTION);
-
-mongoose.connection.on("server connected", () => {
-    console.log("Mongo server connected")
-
+try {
+    mongoose.connect(process.env.DB_CONNECTION)
     server.listen(PORT, () => {
         console.table(listEndpoints(server))
         console.log(`server is running on port n. ${PORT}`)
     })
-})
+} catch (error) { handleError(error) }
 
-mongoose.connection.on("error", err => { console.log(err) })
+
+
+mongoose.set('bufferCommands', false);
