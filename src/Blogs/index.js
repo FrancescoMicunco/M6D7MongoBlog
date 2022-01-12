@@ -1,5 +1,6 @@
 import express from 'express'
 import BlogsModel from './schema.js'
+import CommentsModel from '../Comments/schema.js'
 
 const router = express.Router();
 
@@ -39,6 +40,14 @@ router
         }
     })
 
+.post(async(req, res, next) => {
+    try {
+
+    } catch (error) {
+        next(error)
+    }
+})
+
 .put(async(req, res, next) => {
     try {
         const blog = await BlogsModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
@@ -61,5 +70,48 @@ router
         next(error)
     }
 })
+
+
+
+
+
+router
+    .route('/:id/comments')
+    .get(async(req, res, next) => {
+        try {
+
+        } catch (error) {
+            next(error)
+        }
+    })
+router
+    .route('/:id/comments/:commentId')
+    .get(async(req, res, next) => {
+        try {
+
+        } catch (error) {
+            next(error)
+        }
+    })
+
+.put(async(req, res, next) => {
+    try {
+
+    } catch (error) {
+        next(error)
+    }
+})
+
+.delete(async(req, res, async) => {
+        try {
+
+        } catch (error) {
+            next(error)
+        }
+    })
+    // DELETE / blogPosts /: id / comment /: commentId
+
+
+
 
 export default router
