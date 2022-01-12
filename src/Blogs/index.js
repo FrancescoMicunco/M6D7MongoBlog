@@ -17,7 +17,7 @@ router
     })
     .get(async(req, res, next) => {
         try {
-            const blog = await BlogsModel.find()
+            const blog = await BlogsModel.find().skip(1).limit(4).sort({ comment: 1 })
             res.status(200).send(blog)
 
         } catch (error) {
@@ -82,16 +82,25 @@ router
 .post(async(req, res, next) => {
     try {
         const blogId = await BlogsModel.findById(req.body.blogId, { _id: 0 })
+
         console.log("this is blogId", blogId)
+
         if (blogId) {
+
             const commentToInsert = {...blogId.toObject(), comment: " " }
+
             console.log(commentToInsert)
 
             const updateBlogWithComment = await BlogsModel.findByIdAndUpdate(req.params.blogId, {
+
                 $push: { comment: commentToInsert }
+
             }, { new: true })
+
             if (updateBlogWithComment) {
+
                 res.send(updateBlogWithComment)
+
             } else { console.log("there are no blogs to update") }
 
         }

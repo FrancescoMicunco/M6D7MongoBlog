@@ -16,6 +16,7 @@ const blogPost = new Schema({
         avatar: String,
     },
     content: String,
+    comments: [{ comment: { type: String } }]
 
 })
 
