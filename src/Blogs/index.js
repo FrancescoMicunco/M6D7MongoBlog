@@ -127,7 +127,7 @@ router
         if (blog) {
 
             const index = blog.comments.findIndex(c => c._id.toString() === req.params.commentId)
-
+            console.log(index)
             if (index !== -1) {
 
                 blog.comments[index] = {...blog.comments[index].toObject(), ...req.body }
