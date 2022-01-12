@@ -81,29 +81,20 @@ router
 
 .post(async(req, res, next) => {
     try {
-        const blogId = await BlogsModel.findById(req.body.blogId, { _id: 0 })
+        console.log(req.params.id)
 
-        console.log("this is blogId", blogId)
 
-        if (blogId) {
+        const updateBlogWithComment = await BlogsModel.findByIdAndUpdate(req.params.id, {
 
-            const commentToInsert = {...blogId.toObject(), comment: " " }
+            $push: { comments: req.body }
 
-            console.log(commentToInsert)
+        }, { new: true })
 
-            const updateBlogWithComment = await BlogsModel.findByIdAndUpdate(req.params.blogId, {
+        if (updateBlogWithComment) {
 
-                $push: { comment: commentToInsert }
+            res.send(updateBlogWithComment)
 
-            }, { new: true })
-
-            if (updateBlogWithComment) {
-
-                res.send(updateBlogWithComment)
-
-            } else { console.log("there are no blogs to update") }
-
-        }
+        } else { console.log("there are no blogs to update") }
 
     } catch (error) {
         next(error)
