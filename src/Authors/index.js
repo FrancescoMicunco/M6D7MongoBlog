@@ -53,11 +53,11 @@ router
 
 .delete(async(req, res, next) => {
     try {
-        // const blog = await BlogsModel.findByIdAndDelete(req.params.id)
-        // console.log(blog)
-        // if (blog > 0) {
-        //     res.send("201 - blog deleted!")
-        // } else { res.send("Blog not found!") }
+        const author = await AuthorsModel.findByIdAndDelete(req.params.id)
+        console.log("this is author from delete", author)
+        if (author) {
+            res.send("201 - author deleted!")
+        } else { res.send("author not found!") }
     } catch (error) {
         next(error)
     }

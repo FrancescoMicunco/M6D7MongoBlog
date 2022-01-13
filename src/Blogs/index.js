@@ -56,7 +56,7 @@ router
     try {
         const blog = await BlogsModel.findByIdAndDelete(req.params.id)
         console.log(blog)
-        if (blog > 0) {
+        if (blog) {
             res.send("201 - blog deleted!")
         } else { res.send("Blog not found!") }
     } catch (error) {
