@@ -29,10 +29,10 @@ router
     .route('/:id')
     .get(async(req, res, next) => {
         try {
-            // const blog = await BlogsModel.findById(req.params.id)
-            // if (blog === null) { "this blog doesn't exist" } else {
-            //     res.send(blog)
-            // }
+            const author = await AuthorsModel.findById(req.params.id)
+            if (author === null) { "this author doesn't exist" } else {
+                res.send(author)
+            }
 
         } catch (error) {
             next(error)
