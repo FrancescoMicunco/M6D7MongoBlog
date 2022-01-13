@@ -5,16 +5,13 @@ const { Schema, model } = mongoose
 const blogPost = new Schema({
 
     category: { type: String, required: true },
-    title: String,
-    cover: String,
+    title: { type: String, required: true },
+    cover: { type: String, required: true },
     readTime: {
-        "value": String,
+        "value": { type: Number },
         "unit": String,
     },
-    author: {
-        name: String,
-        avatar: String,
-    },
+    author: [{ type: Schema.Types.ObjectId, ref: "Author" }],
     content: String,
     comments: [{ comment: { type: String } }]
 
