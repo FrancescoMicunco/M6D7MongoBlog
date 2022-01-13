@@ -33,7 +33,6 @@ router
             if (author === null) { "this author doesn't exist" } else {
                 res.send(author)
             }
-
         } catch (error) {
             next(error)
         }
@@ -43,10 +42,10 @@ router
 
 .put(async(req, res, next) => {
     try {
-        // const blog = await BlogsModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        // if (blog === null) { "this blog doesn't exist" } else {
-        //     res.send(blog)
-        // }
+        const author = await AuthorsModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        if (author === null) { "this author doesn't exist" } else {
+            res.send(author)
+        }
     } catch (error) {
         next(error)
     }
