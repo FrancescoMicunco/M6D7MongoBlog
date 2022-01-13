@@ -17,8 +17,8 @@ router
     })
     .get(async(req, res, next) => {
         try {
-            const author = await AuthorsModel.find().skip(1).limit(4)
-            res.status(200).send(blog)
+            const author = await AuthorsModel.find().limit(4)
+            res.status(200).send(author)
 
         } catch (error) {
             next(error)
