@@ -1,6 +1,8 @@
 import express from 'express'
 import BlogsModel from './schema.js'
 import CommentsModel from '../Comments/schema.js'
+import q2m from 'query-to-mongo'
+
 
 const router = express.Router();
 
@@ -16,8 +18,14 @@ router
         }
     })
     .get(async(req, res, next) => {
+
         try {
-            const blog = await BlogsModel.find().skip(1).limit(4).sort({ comment: 1 })
+            const query = q2m(req.query)
+            const blog = await BlogsModel.find()
+                .skip(query.options.skip)
+                .limit(query.options.limit)
+                .sort(query.options.sort)
+                .populate('author', 'name avatar')
             res.status(200).send(blog)
 
         } catch (error) {
@@ -29,7 +37,7 @@ router
     .route('/:id')
     .get(async(req, res, next) => {
         try {
-            const blog = await BlogsModel.findById(req.params.id)
+            const blog = await BlogsModel.findById(req.params.id).populate('author', 'name avatar')
             if (blog === null) { "this blog doesn't exist" } else {
                 res.send(blog)
             }
@@ -81,12 +89,10 @@ router
 
 .post(async(req, res, next) => {
     try {
-        console.log(req.params.id)
-
-
         const updateBlogWithComment = await BlogsModel.findByIdAndUpdate(req.params.id, {
 
-            $push: { comments: req.body }
+            $push: { comments: req.body },
+
 
         }, { new: true })
 
@@ -145,7 +151,7 @@ router
     }
 })
 
-.delete(async(req, res, async) => {
+.delete(async(req, res, next) => {
     try {
         const blog = await BlogsModel.findByIdAndUpdate(req.params.id, { $pull: { comments: { _id: req.params.commentId } } }, { new: true })
         if (blog) {

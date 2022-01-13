@@ -39,7 +39,6 @@ router
     })
 
 
-
 .put(async(req, res, next) => {
     try {
         const author = await AuthorsModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
