@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors'
-import { verifyJWT, veryfyJWT } from './tools.js'
+import { verifyJWT } from './tools.js'
 
 export const JWTAuthMiddleware = async(req, res, next) => {
 

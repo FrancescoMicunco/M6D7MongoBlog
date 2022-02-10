@@ -1,5 +1,9 @@
 import express from 'express'
 import AuthorsModel from './schema.js'
+import createHttpError from "http-errors"
+import { JWTAuthMiddleware } from "../authentication/token.js"
+import { adminOnlyMiddleware } from "../authentication/admin.js"
+import { JWTAuthenticate } from "../authentication/tools.js"
 
 
 const router = express.Router();
@@ -15,19 +19,58 @@ router
             next(error)
         }
     })
-    .get(async(req, res, next) => {
-        try {
-            const author = await AuthorsModel.find().limit(4)
-            res.status(200).send(author)
+    .get(JWTAuthMiddleware,
+        adminOnlyMiddleware, async(req, res, next) => {
+            try {
+                const author = await AuthorsModel.find().limit(4)
+                res.status(200).send(author)
 
+            } catch (error) {
+                next(error)
+            }
+        })
+
+router
+    .route('/me', )
+    .put(JWTAuthMiddleware, async(req, res, next) => {
+        try {
+            const author = await AuthorsModel.findByIdAndUpdate(req.author._id, req.body)
+            if (author) {
+                res.send(author)
+            } else {
+                next(401, 'Author not found!')
+            }
         } catch (error) {
             next(error)
         }
     })
 
+.get(JWTAuthMiddleware, async(req, res, next) => {
+    const author = await AuthorsModel.findById(req.author._id)
+    if (author) {
+        res.send(author)
+    } else {
+        next(401, "Author not found!")
+    }
+})
+
+.delete(JWTAuthMiddleware, async(req, res, next) => {
+    try {
+        const author = await AuthorsModel.findByIdAndDelete(req.author._id)
+        if (author) {
+            res.send()
+        } else {
+            next(401, `Author not found!`)
+        }
+    } catch (error) {
+        next(error)
+    }
+})
+
+
 router
     .route('/:id')
-    .get(async(req, res, next) => {
+    .get(JWTAuthMiddleware, async(req, res, next) => {
         try {
             const author = await AuthorsModel.findById(req.params.id)
             if (author === null) { "this author doesn't exist" } else {
@@ -39,7 +82,7 @@ router
     })
 
 
-.put(async(req, res, next) => {
+.put(JWTAuthMiddleware, async(req, res, next) => {
     try {
         const author = await AuthorsModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
         if (author === null) { "this author doesn't exist" } else {
@@ -50,7 +93,7 @@ router
     }
 })
 
-.delete(async(req, res, next) => {
+.delete(JWTAuthMiddleware, async(req, res, next) => {
     try {
         const author = await AuthorsModel.findByIdAndDelete(req.params.id)
         console.log("this is author from delete", author)
@@ -62,6 +105,22 @@ router
     }
 })
 
+router
+    .route('/login')
+    .post(async(req, res, next) => {
+        try {
+            const { email, password } = req.body;
+            const author = await AuthorsModel.checkCredentials(email, password)
+            if (author) {
+                const accessToken = await JWTAuthenticate(author)
+                res.send({ accessToken })
+            } else {
+                next(createHttpError(401, "Please Check credentials"))
+            }
+        } catch (error) {
+            next(error)
+        }
+    })
 
 
 export default router
