@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 const { Schema, model } = mongoose;
 
-const author = new Schema({
+const authorSchema = new Schema({
     name: { type: String, required: true },
     avatar: { type: String, required: true },
     email: { type: String, required: true },
@@ -13,7 +13,7 @@ const author = new Schema({
     timestamps: true,
 });
 
-author.pre("save", async function(next) {
+authorSchema.pre("save", async function(next) {
     const newAuthor = this;
     const plainPW = newAuthor.password;
 
@@ -24,7 +24,7 @@ author.pre("save", async function(next) {
     next();
 });
 
-author.methods.toJSON = function() {
+authorSchema.methods.toJSON = function() {
     const userDocument = this;
     const userObject = userDocument.toObject();
     delete userObject.password;
@@ -33,7 +33,7 @@ author.methods.toJSON = function() {
     return userObject;
 };
 
-author.statics.checkCredentioals = async function(email, plainPW) {
+authorSchema.statics.checkCredentials = async function(email, plainPW) {
     const author = await this.findOne({ email });
     if (author) {
         const isMatch = await bcrypt.compare(plainPW, author.password);
@@ -47,4 +47,4 @@ author.statics.checkCredentioals = async function(email, plainPW) {
     }
 };
 
-export default model("Author", author);
+export default model("Author", authorSchema);
