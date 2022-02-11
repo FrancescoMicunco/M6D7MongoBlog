@@ -4,10 +4,12 @@ import createHttpError from "http-errors"
 import { JWTAuthMiddleware } from "../authentication/token.js"
 import { adminOnlyMiddleware } from "../authentication/admin.js"
 import { JWTAuthenticate } from "../authentication/tools.js"
-
+import passport from 'passport'
 
 const router = express.Router();
 
+
+// ====== register a new author
 router
     .route('/register')
     .post(async(req, res, next) => {
@@ -19,6 +21,8 @@ router
             next(error)
         }
     })
+
+// ======0 get list of authors
 
 router
     .route('/')
@@ -33,6 +37,8 @@ router
             }
         })
 
+
+// ===== edit personal profile
 router
     .route('/me', )
     .put(JWTAuthMiddleware, async(req, res, next) => {
@@ -70,7 +76,7 @@ router
     }
 })
 
-
+//  ======== get/put and delete specific author ======
 router
     .route('/:id')
     .get(JWTAuthMiddleware, async(req, res, next) => {
@@ -108,6 +114,8 @@ router
     }
 })
 
+
+// ======== author login ============
 router
     .route('/login')
     .post(async(req, res, next) => {
@@ -124,6 +132,16 @@ router
             next(error)
         }
     })
-
+router
+    .route("/googleRedirect")
+    .get(passport.authenticate("google"),
+        async(req, res, next) => {
+            try {
+                console.log("TOKEN: ", req.user.tokens)
+                res.redirect(`${process.env.FE_URL}?accessToken=${req.user.tokens.accessToken}&refreshToken=${req.user.tokens.refreshToken}`)
+            } catch (error) {
+                next(error)
+            }
+        })
 
 export default router

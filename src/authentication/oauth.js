@@ -3,12 +3,12 @@ import GoogleStrategy from "passport-google-oauth20";
 import AuthorModel from "../Authors/Schema.js";
 import { JWTAuthenticate } from "./tools.js";
 
-const googleStretegy = new GoogleStrategy({
+const googleStrategy = new GoogleStrategy({
         clientID: process.env.GOOGLE_OAUTH_ID,
         clientSecret: process.env.GOOGLE_OAUTH_SECRET,
         callbackURL: `${process.env.API_URL}/users/googleRedirect`,
     },
-    async(accessToken, profile, passportnext) => {
+    async(accessToken, profile, passportNext) => {
         try {
             console.log("PROFILE", profile);
             const user = await AuthorModel.findOne({ googleId: profile.id }); //is user in DB?
@@ -35,3 +35,5 @@ const googleStretegy = new GoogleStrategy({
 passport.serializeUser(function(data, passportNext) {
     passportNext(null, data);
 });
+
+export default googleStrategy
