@@ -9,7 +9,7 @@ import { JWTAuthenticate } from "../authentication/tools.js"
 const router = express.Router();
 
 router
-    .route('/')
+    .route('/register')
     .post(async(req, res, next) => {
         try {
             const author = await authorModel(req.body)
@@ -19,10 +19,13 @@ router
             next(error)
         }
     })
-    .get(JWTAuthMiddleware,
-        adminOnlyMiddleware, async(req, res, next) => {
+
+router
+    .route('/')
+    .get(
+        async(req, res, next) => {
             try {
-                const author = await authorModel.find().limit(4)
+                const author = await authorModel.find()
                 res.status(200).send(author)
 
             } catch (error) {

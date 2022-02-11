@@ -25,12 +25,12 @@ authorSchema.pre("save", async function(next) {
 });
 
 authorSchema.methods.toJSON = function() {
-    const userDocument = this;
-    const userObject = userDocument.toObject();
-    delete userObject.password;
-    delete userObject.__v;
+    const authorDocument = this;
+    const authorObject = authorDocument.toObject();
+    delete authorObject.password;
+    delete authorObject.__v;
 
-    return userObject;
+    return authorObject;
 };
 
 authorSchema.statics.checkCredentials = async function(email, plainPW) {
