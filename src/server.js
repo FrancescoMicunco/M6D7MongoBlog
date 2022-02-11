@@ -2,6 +2,8 @@ import express from 'express'
 import listEndpoints from 'express-list-endpoints'
 import cors from 'cors'
 import mongoose from 'mongoose'
+import passport from 'passport'
+import googleStrategy from './authentication/oauth.js'
 import blogRouter from './Blogs/index.js'
 import authorsRouter from './Authors/index.js'
 import {
@@ -16,7 +18,10 @@ const server = express()
 const PORT = process.env.PORT || 3001
 
 server.use(cors())
+
 server.use(express.json())
+
+server.use(passport.initialize())
     // ==========  endPoints ==========
 server.use('/blog', blogRouter)
 server.use('/authors', authorsRouter)

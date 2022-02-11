@@ -114,10 +114,8 @@ router
         try {
             const { email, password } = req.body;
             const author = await authorModel.checkCredentials(email, password)
-            console.log("this is author credentials", author)
             if (author) {
                 const accessToken = await JWTAuthenticate(author)
-                console.log("this is accessToken", accessToken)
                 res.send({ accessToken })
             } else {
                 next(createHttpError(401, "Please Check credentials"))
